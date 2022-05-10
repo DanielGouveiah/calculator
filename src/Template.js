@@ -15,8 +15,8 @@ const Template = (props) => {
         <button onClick={() => props.porcentage()} className="symbol">
           %
         </button>
-        <button onClick={() => props.times()} className="symbol">
-          *
+        <button onClick={() => props.division()} className="symbol">
+          /
         </button>
         <button onClick={(e) => props.handleClick(e)} value={7}>
           7
@@ -27,8 +27,8 @@ const Template = (props) => {
         <button onClick={(e) => props.handleClick(e)} value={9}>
           9
         </button>
-        <button onClick={() => props.sub()} className="symbol">
-          -
+        <button onClick={() => props.times()} className="symbol">
+          *
         </button>
         <button onClick={(e) => props.handleClick(e)} value={4}>
           4
@@ -39,8 +39,8 @@ const Template = (props) => {
         <button onClick={(e) => props.handleClick(e)} value={6}>
           6
         </button>
-        <button onClick={props.plus} className="symbol">
-          +
+        <button onClick={() => props.sub()} className="symbol">
+          -
         </button>
         <button onClick={(e) => props.handleClick(e)} value={1}>
           1
@@ -51,8 +51,8 @@ const Template = (props) => {
         <button onClick={(e) => props.handleClick(e)} value={3}>
           3
         </button>
-        <button onClick={() => props.division()} className="symbol">
-          /
+        <button onClick={props.plus} className="symbol">
+          +
         </button>
         <button onClick={(e) => props.handleClick(e)} className="zero" value={0}>
           0

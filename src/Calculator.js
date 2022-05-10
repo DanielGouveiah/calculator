@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Template from "./Template";
 
 const Calculator = () => {
   const [num, setNum] = useState(0);
   const [oldNum, setOldNum] = useState(0);
-  const [operator, setOperator] = useState();
-  const [feed, setFeed] = useState(" . ");
+  const [operator, setOperator] = useState("");
+  const [already, setAlready] = useState(false);
+  const [feed, setFeed] = useState(0);
 
   const handleClick = (e) => {
     if (num === 0) {
@@ -17,11 +18,10 @@ const Calculator = () => {
 
   const handleDelete = () => {
     setNum(0);
-    setFeed(" . ");
-  };
-
-  const porcentage = () => {
-    setNum(num / 100);
+    setOldNum(0);
+    setFeed(0);
+    setAlready(false);
+    setOperator("");
   };
 
   const changeOp = () => {
@@ -32,63 +32,122 @@ const Calculator = () => {
     }
   };
 
+  let a = 0;
+
   const plus = () => {
     setOperator("+");
-    setOldNum(num);
-    setNum(0);
-  };
-  const sub = () => {
-    setOperator("-");
-    setOldNum(num);
-    setNum(0);
-  };
-  const division = () => {
-    setOperator("/");
-    setOldNum(num);
-    setNum(0);
-  };
-  const times = () => {
-    setOperator("*");
-    setOldNum(num);
+    if (!already) {
+      setOldNum(num);
+      a = num;
+      setAlready(true);
+    } else {
+      if (operator !== "+") {
+        a = eval(parseFloat(num) + operator + parseFloat(oldNum));
+        setOldNum(a);
+      } else {
+        a = parseFloat(num) + parseFloat(oldNum);
+        setOldNum(a);
+      }
+    }
+    setFeed(a + "+");
     setNum(0);
   };
 
-  const feedNum = (res) => {
-    setFeed(oldNum + " " + operator + " " + num + " = " + res);
+  const less = () => {
+    setOperator("-");
+    if (!already) {
+      setOldNum(num);
+      a = num;
+      setAlready(true);
+    } else {
+      if (operator !== "-") {
+        a = eval(parseFloat(num) + operator + parseFloat(oldNum));
+        setOldNum(a);
+      } else {
+        a = parseFloat(num) - parseFloat(oldNum);
+        setOldNum(a);
+      }
+    }
+    setFeed(a + "-");
+    setNum(0);
+  };
+
+  const division = () => {
+    setOperator("/");
+    if (!already) {
+      setOldNum(num);
+      a = num;
+      setAlready(true);
+    } else {
+      if (operator !== "/") {
+        a = eval(parseFloat(num) + operator + parseFloat(oldNum));
+        setOldNum(a);
+      } else {
+        a = parseFloat(oldNum) / parseFloat(num);
+        setOldNum(a);
+      }
+    }
+    setFeed(a + "/");
+    setNum(0);
+  };
+
+  const times = () => {
+    setOperator("*");
+    if (!already) {
+      setOldNum(num);
+      a = num;
+      setAlready(true);
+    } else {
+      if (operator !== "*") {
+        a = eval(parseFloat(oldNum) + operator + parseFloat(num));
+        setOldNum(a);
+      } else {
+        a = parseFloat(num) * parseFloat(oldNum);
+        setOldNum(a);
+      }
+    }
+    setFeed(a + "*");
+    setNum(0);
+  };
+
+  const porcentage = () => {
+    setNum(num / 100);
   };
 
   const result = () => {
-    let answer = 0;
     if (operator === "+") {
-      answer = Number(oldNum) + Number(num);
-      setNum(answer);
+      setFeed(feed + num + "=");
+      setNum(Number(num) + Number(oldNum));
+      setOperator("+");
     } else if (operator === "-") {
-      answer = Number(oldNum) - Number(num);
-      setNum(answer);
+      setFeed(feed + num + "=");
+      setNum(Number(oldNum) - Number(num));
+      setOperator("-");
     } else if (operator === "/") {
-      answer = Number(oldNum) / Number(num);
-      setNum(answer);
+      setFeed(feed + num + "=");
+      setNum(Number(oldNum) / Number(num));
+      setOperator("/");
     } else if (operator === "*") {
-      answer = Number(oldNum) * Number(num);
-      setNum(answer);
+      setFeed(feed + num + "=");
+      setNum(Number(oldNum) * Number(num));
+      setOperator("*");
     }
-    feedNum(answer);
-    setOldNum(0);
+    setAlready(false);
   };
 
   return (
     <Template
-      plus={plus}
+      num={num}
       handleClick={handleClick}
       handleDelete={handleDelete}
       changeOp={changeOp}
+      plus={plus}
+      feed={feed}
+      sub={less}
+      result={result}
       division={division}
       times={times}
-      num={num}
-      sub={sub}
       porcentage={porcentage}
-      result={result}
-      feed={feed}
     />
   );
 };
